@@ -7,7 +7,7 @@ import {FocusMonitor} from "@angular/cdk/a11y";
 import {coerceBooleanProperty} from "@angular/cdk/coercion";
 
 @Component({
-  selector: 'lib-ng-input-range',
+  selector: 'ng-input-range',
   template: `
     <input
       #inputRef
