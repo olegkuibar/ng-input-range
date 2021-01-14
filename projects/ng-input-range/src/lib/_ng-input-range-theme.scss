@@ -1,15 +1,17 @@
 @import '~@angular/material/theming';
 @import 'rangeTrackStyles';
-@import "rangeThumbStyles";
+@import 'rangeThumbStyles';
 
 $primary: mat-palette($mat-teal, 400);
-$accent:  mat-palette($mat-pink, A200, A100, A400);
-$theme: mat-light-theme((
-  color: (
-    primary: $primary,
-    accent: $accent,
+$accent: mat-palette($mat-pink, A200, A100, A400);
+$theme: mat-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+    ),
   )
-));
+);
 
 @mixin mat-input-range-color($config-or-theme) {
   // Extract the color configuration in case a theme has been passed.
@@ -24,6 +26,10 @@ $theme: mat-light-theme((
   // Define any styles affected by the theme.
 
   input[type='range'] {
+    /**
+    * You can't comma-separate the browser specific selectors, therefore we use a mixin.
+    */
+
     @include getTrackStyles('-webkit-slider-runnable-track');
     @include getTrackStyles('-moz-range-track');
 
@@ -45,10 +51,5 @@ $theme: mat-light-theme((
     }
   }
 }
-
-/**
- * You can't comma-separate the browser specific selectors, therefore we use a mixin.
- */
-
 
 @include mat-input-range-color($theme);
