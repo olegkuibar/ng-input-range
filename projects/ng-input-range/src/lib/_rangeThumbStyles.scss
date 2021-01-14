@@ -1,0 +1,23 @@
+
+@mixin getThumbStyles($browser, $primary) {
+  &::#{$browser} {
+    height: 0.75rem;
+    width: 0.75rem;
+    border: 0.25rem #ffffff;
+    border-radius: 50%;
+    background: $primary;
+
+    cursor: pointer;
+
+    transition: all 0.3s;
+    @content;
+  }
+
+  &:focus::#{$browser} {
+    background: $primary;
+
+    /** Workaround for semi transparent border. */
+    border-width: 0;
+    box-shadow: 0 0 0 p 0.25rem $primary;
+  }
+}

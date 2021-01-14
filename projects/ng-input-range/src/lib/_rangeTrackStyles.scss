@@ -1,0 +1,11 @@
+/**
+ * You can't comma-separate the browser specific selectors, therefore we use a mixin.
+ */
+@mixin getTrackStyles($browser) {
+  &::#{$browser} {
+    height: 1px;
+    margin: 0.875rem 0; // (2rem - .25rem) / 2
+    background: rgba(0, 0, 0, 0.12); // slider rail color
+    border: none;
+  }
+}
