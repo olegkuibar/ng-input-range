@@ -1,27 +1,107 @@
 # NgInputRange
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0.
+(BETA v0.1.0)
 
-## Development server
+Repository contains two projects:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+1. library -> component publish on [npm as "ng-input-range"](https://www.npmjs.com/package/ng-input-range)
+2. showcase -> example of usage of the library
 
-## Code scaffolding
+## About
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+`ng-input-range` introduces combined `<input type="number">` and `<input type="range">` as single component, allows user
+to set value or select from a range of values by moving the slider thumb benith input.
 
-## Build
+Component implements `ControlValueAccessor`, `MatFormFieldControl` therefore supports usage of Reactive Forms and
+can/should be used inside `mat-form-field` component
+of [MatFormFieldModule](https://material.angular.io/components/form-field/overview)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Install
 
-## Running unit tests
+`npm i ng-input-range`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Usage
 
-## Running end-to-end tests
+### Example:
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Update your Module dependencies with
 
-## Further help
+```typescript
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {NgInputRangeModule} from "./ng-input-range.module";
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+@NgModule({
+  declarations: [MyComponent],
+  imports: [
+    FormsModule, // required if using "FormControl" and/or "FormGroup"
+    ReactiveFormsModule, // required if using "FormControl" and/or "FormGroup"
+    MatFormFieldModule,
+    NgInputRangeModule,
+  ],
+  providers: [],
+  bootstrap: [MyComponent],
+})
+```
+
+1. **Using `ng-input-range` with `FormControl`**
+
+```typescript
+// my-component.component.ts
+
+formGroup: new FormGroup({
+  inputWithRange: new FormControl({value: 0, disabled: false}),
+});
+```
+
+HTML file
+
+```angular2html
+<!-- my-component.component.html-->
+
+<mat-form-field>
+  <ng-input-range
+    min="0"
+    max="256"
+    appearence="outline"
+    formControlName="inputWithRange"
+  ></ng-input-range>
+</mat-form-field>
+```
+
+2. **Using `ng-input-range` with data binding `[value]="inputWithRangeValue"`**
+
+TS file
+
+```typescript
+// my-component.component.ts
+
+public inputWithRangeValue = 128;
+```
+
+HTML
+
+```angular2html
+<!-- my-component.component.html-->
+
+<mat-form-field>
+  <ng-input-range
+    min="0"
+    max="256"
+    appearence="outline"
+    [value]="inputWithRangeValue"
+  ></ng-input-range>
+</mat-form-field>
+```
+
+## API references for Angular Material Input with Range component
+
+| Name                           | Description                                 |
+| :----------------------------- | :------------------------------------------ |
+| `@Input() color: ThemePalette` | Theme color palette for the component.      |
+| `@Input() disabled: boolean`   | Whether the component is disabled.          |
+| `@Input() max: number`         | The maximum value that the slider can have. |
+| `@Input() min: number`         | The minimum value that the slider can have. |
+| `@Input() step: number`        | The values at which the thumb will snap.    |
+| `@Input() value: number`       | Value of the input.
+| `@Output() change: Event`      | Emits `value` on input number/range change
