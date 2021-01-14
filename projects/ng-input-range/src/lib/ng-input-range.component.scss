@@ -1,0 +1,50 @@
+Inpu@import 'rangeTrackStyles';
+
+/**
+ * Cross browser "<input type="range" />" reset
+ * Source: https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+ */
+
+input[type='range'] {
+  position: absolute;
+  bottom: -0.35rem;
+  left: 0;
+  margin: 0;
+  height: 0.75rem;
+}
+
+input[type='range'] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+  }
+
+  &:focus {
+    outline: none; /* Removes the blue border. */
+  }
+
+  &::-ms-track {
+    width: 100%;
+    cursor: pointer;
+    background: transparent; /* Hides the slider so custom styles can be added */
+    border-color: transparent;
+    color: transparent;
+  }
+}
+
+::ng-deep {
+  .mat-form-field-flex {
+    &:hover,
+    &:focus {
+      input[type='range'] {
+        @include getTrackStyles('-webkit-slider-runnable-track');
+        @include getTrackStyles('-moz-range-track');
+
+        @include getTrackStyles('-ms-track');
+
+        background: transparent;
+      }
+    }
+  }
+}
