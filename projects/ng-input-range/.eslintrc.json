@@ -9,10 +9,6 @@
         "*.ts"
       ],
       "parserOptions": {
-        "project": [
-          "projects/ng-input-range/tsconfig.lib.json",
-          "projects/ng-input-range/tsconfig.spec.json"
-        ],
         "createDefaultProgram": true
       },
       "rules": {
