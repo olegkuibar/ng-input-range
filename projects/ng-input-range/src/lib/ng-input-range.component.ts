@@ -1,37 +1,58 @@
-import {ControlValueAccessor, FormBuilder, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {Component, ElementRef, forwardRef, HostBinding, Input, OnInit} from "@angular/core";
-import {Subject, Subscription} from "rxjs";
-import {InputNumberBase} from "./models/input-number-base.directive";
-import {MatFormFieldControl} from "@angular/material/form-field";
-import {FocusMonitor} from "@angular/cdk/a11y";
-import {coerceBooleanProperty} from "@angular/cdk/coercion";
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  forwardRef,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { FocusableOption, FocusMonitor, FocusOrigin } from '@angular/cdk/a11y';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { CanColor, CanColorCtor, CanDisable, mixinColor, ThemePalette } from '@angular/material/core';
+import { map, pairwise, startWith } from 'rxjs/operators';
+
+// Boilerplate for applying mixins to NgInputRange.
+/** @docs-private */
+class NgInputRangeBase {
+  constructor(public _elementRef: ElementRef) {}
+}
+
+const _NgInputRangeMixinBase: CanColorCtor & typeof NgInputRangeBase = mixinColor(NgInputRangeBase);
 
 @Component({
   selector: 'ng-input-range',
   template: `
-    <input
-      #inputRef
-      matInput
-      type="number"
-      [step]="step"
-      [min]="min"
-      [max]="max"
-      [formControl]="formControl"
-      [value]="rangeRef.value"
-    />
-    <input
-      #rangeRef
-      class="pr-0"
-      type="range"
-      [step]="step"
-      [min]="min"
-      [max]="max"
-      [formControl]="formControl"
-      [value]="inputRef.value"
-    />
-
+    <ng-container [formGroup]="form">
+      <input
+        matInput
+        type="number"
+        formControlName="input"
+        [step]="step"
+        [min]="min"
+        [max]="max"
+        [value]="formControl.valueChanges | async"
+      />
+      <input
+        class="pr-0"
+        type="range"
+        formControlName="range"
+        [step]="step"
+        [min]="min"
+        [max]="max"
+        [value]="formControl.valueChanges | async"
+      />
+    </ng-container>
   `,
-  styles: [],
+  styleUrls: ['ng-input-range.component.scss', '_ng-input-range-theme.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -45,29 +66,51 @@ import {coerceBooleanProperty} from "@angular/cdk/coercion";
   ],
 })
 export class NgInputRangeComponent
-  extends InputNumberBase
-  implements OnInit, ControlValueAccessor, MatFormFieldControl<number> {
+  extends _NgInputRangeMixinBase
+  implements
+    OnInit,
+    ControlValueAccessor,
+    MatFormFieldControl<number>,
+    AfterViewInit,
+    OnDestroy,
+    CanDisable,
+    CanColor,
+    FocusableOption {
   static nextId = 0;
-  readonly autofilled: boolean;
-  readonly empty: boolean;
-  readonly shouldLabelFloat: boolean;
-  readonly stateChanges: Subject<void> = new Subject<void>();
-  readonly userAriaDescribedBy: string;
-  readonly formControl = new FormControl('');
-  ngControl = null;
+  @Input() min: number;
+  @Input() max: number;
+  @Input() minLength: number;
+  @Input() maxLength: number;
+  @Input() size: number;
+  @Input() step: number;
+  @Input() color: ThemePalette = 'accent';
+
   focused = false;
   errorState = false;
-  controlType = 'product-team-input';
+
+  readonly ngControl = null;
+  readonly controlType = 'ng-input-range';
+  readonly autofilled: boolean;
+  readonly empty: boolean;
+  readonly stateChanges: Subject<void> = new Subject<void>();
+  readonly userAriaDescribedBy: string;
+
+  readonly form = new FormGroup({
+    input: new FormControl({ value: 0, disabled: this.disabled }),
+    range: new FormControl({ value: 0, disabled: this.disabled }),
+  });
+  readonly formControl = new FormControl(0);
+
   @HostBinding() id = `${this.controlType}-${NgInputRangeComponent.nextId++}`;
   @HostBinding('attr.aria-describedby') describedBy = '';
   private subscription: Subscription;
 
-  constructor(
-    private fb: FormBuilder,
-    private fm: FocusMonitor,
-    private elRef: ElementRef
-  ) {
-    super();
+  constructor(_elementRef: ElementRef, protected fm: FocusMonitor) {
+    super(_elementRef);
+  }
+
+  get shouldLabelFloat(): boolean {
+    return this.focused || !this.empty;
   }
 
   @Input() set readonly(val: boolean) {
@@ -133,7 +176,7 @@ export class NgInputRangeComponent
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() !== 'input') {
-      this.elRef.nativeElement.querySelector('input').focus();
+      ((this._elementRef.nativeElement as HTMLInputElement).firstElementChild as HTMLInputElement).focus();
     }
   }
 
@@ -142,17 +185,49 @@ export class NgInputRangeComponent
   }
 
   ngOnInit() {
-    this.subscription = this.formControl.valueChanges.subscribe((v) =>
-      this.onChange(v)
-    );
+    this.subscription = this.form.valueChanges
+      .pipe(
+        startWith<{ input: number; range: number }>(this.form.value),
+        pairwise(),
+        map(([oldValue, newValue]) => {
+          if (oldValue.range !== newValue.range) {
+            this.formControl.setValue(newValue.range ?? this.min);
+
+            return { input: newValue.range, range: newValue.range };
+          } else if (oldValue.input !== newValue.input) {
+            this.formControl.setValue(newValue.input ?? this.min);
+
+            return { input: newValue.input, range: newValue.input };
+          }
+        })
+      )
+      .subscribe(() => this.onChange(this.formControl.value));
+  }
+
+  ngAfterViewInit() {
+    this.fm.monitor((this._elementRef.nativeElement as HTMLInputElement).firstElementChild as HTMLInputElement, true);
+  }
+
+  ngOnDestroy() {
+    this.fm.stopMonitoring((this._elementRef.nativeElement as HTMLInputElement).firstElementChild as HTMLInputElement);
+  }
+
+  focus(origin?: FocusOrigin, options?: FocusOptions): void {
+    if (origin) {
+      this.fm.focusVia(this._getHostElement(), origin, options);
+    } else {
+      this._getHostElement().focus(options);
+    }
+  }
+
+  _getHostElement() {
+    return (this._elementRef.nativeElement as HTMLInputElement).firstElementChild as HTMLInputElement;
   }
 
   // Function to call when the rating changes.
-  onChange = (value: number) => {
-  };
+  onChange = (value: number) => {};
   // Function to call when the input is touched (when a star is clicked).
-  onTouched = () => {
-  };
+  onTouched = () => {};
 
   // Allows Angular to update the model (rating).
   // Update the model and changes needed for the view here.
