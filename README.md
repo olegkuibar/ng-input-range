@@ -43,8 +43,7 @@ import {NgInputRangeModule} from "./ng-input-range.module";
   bootstrap: [MyComponent],
 })
 ```
-
-1. **Using `ng-input-range` with `FormControl`**
+#### **Using `ng-input-range` with `FormControl`**
 
 ```typescript
 // my-component.component.ts
@@ -53,8 +52,6 @@ formGroup: new FormGroup({
   inputWithRange: new FormControl({value: 0, disabled: false}),
 });
 ```
-
-HTML file
 
 ```angular2html
 <!-- my-component.component.html-->
@@ -70,9 +67,7 @@ HTML file
 </mat-form-field>
 ```
 
-2. **Using `ng-input-range` with data binding `[value]="inputWithRangeValue"`**
-
-TS file
+#### **Using `ng-input-range` with data binding `[value]="inputWithRangeValue"`**
 
 ```typescript
 // my-component.component.ts
@@ -80,8 +75,6 @@ TS file
 public inputWithRangeValue = 128;
 public theme: 'primary' | 'accent' | 'warn';
 ```
-
-HTML
 
 ```angular2html
 <!-- my-component.component.html-->
