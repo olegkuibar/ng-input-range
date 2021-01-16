@@ -1,6 +1,6 @@
 # NgInputRange
 
-(BETA v0.1.0)
+(BETA v0.1.2)
 
 Repository contains two projects:
 
