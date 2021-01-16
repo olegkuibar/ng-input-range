@@ -8,6 +8,14 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  get value(): number {
+    return this._value;
+  }
+
+  set value(value: number) {
+    this._value = value;
+    this.form.setValue({ inputRange: value });
+  }
   @ViewChild(NgInputRangeComponent) inputRange: NgInputRangeComponent;
 
   title = 'ng-input-range-showcase';
@@ -16,7 +24,6 @@ export class AppComponent {
   max = 100;
   min = 0;
   step = 1;
-  value = 0;
   appearance: 'fill' | 'outline' = 'outline';
   theme: 'primary' | 'accent' = 'primary';
 
@@ -25,6 +32,8 @@ export class AppComponent {
   });
 
   eventCount = 0;
+
+  private _value = 0;
 
   increaseEventCount(): void {
     this.eventCount++;
