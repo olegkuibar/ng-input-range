@@ -33,6 +33,17 @@
         </mat-select>
       </mat-form-field>
     </section>
+
+    <section class="example-section">
+      <mat-form-field appearance="outline">
+        <mat-label>Theme</mat-label>
+        <mat-select [(value)]="theme">
+          <mat-option value="primary">Primary</mat-option>
+          <mat-option value="accent">Accent</mat-option>
+          <mat-option value="warn">Warn</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
   </div>
 </mat-card>
 
@@ -45,7 +56,7 @@
         [min]="min"
         [max]="max"
         [disabled]="disabled"
-        [color]="'primary'"
+        [color]="theme"
         (change)="increaseEventCount()"
       ></ng-input-range>
     </mat-form-field>
@@ -63,11 +74,12 @@
           formControlName="inputRange"
           [min]="min"
           [max]="max"
-          [color]="'primary'"
+          [disabled]="disabled"
+          [color]="theme"
         ></ng-input-range>
       </mat-form-field>
     </ng-container>
   </mat-card-content>
 
-  <div>Form Control Value: {{ form.get('inputRange').valueChanges | async }}</div>
+  <div *ngIf="form.get('inputRange') as range">Form Control Value: {{ (range.valueChanges | async) || range.value }}</div>
 </mat-card>
