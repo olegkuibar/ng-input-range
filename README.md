@@ -63,6 +63,7 @@ HTML file
   <ng-input-range
     min="0"
     max="256"
+    color="primary"
     appearence="outline"
     formControlName="inputWithRange"
   ></ng-input-range>
@@ -77,6 +78,7 @@ TS file
 // my-component.component.ts
 
 public inputWithRangeValue = 128;
+public theme: 'primary' | 'accent' | 'warn';
 ```
 
 HTML
@@ -89,6 +91,7 @@ HTML
     min="0"
     max="256"
     appearence="outline"
+    [color]="theme"
     [value]="inputWithRangeValue"
   ></ng-input-range>
 </mat-form-field>
