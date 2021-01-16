@@ -1,32 +1,73 @@
-import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  NgControl,
+  NgForm,
+} from '@angular/forms';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  DoCheck,
   ElementRef,
-  forwardRef,
   HostBinding,
   Input,
+  OnDestroy,
   OnInit,
+  Optional,
+  Self,
+  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import {
+  CanColor,
+  CanColorCtor,
+  CanDisable,
+  CanDisableCtor,
+  mixinColor,
+  mixinDisabled,
+  ThemePalette,
+} from '@angular/material/core';
+import { Subject } from 'rxjs';
 import { MatFormFieldControl } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { CanColor, CanColorCtor, CanDisable, mixinColor, ThemePalette } from '@angular/material/core';
-import { map, pairwise, startWith } from 'rxjs/operators';
+import { map, pairwise, startWith, take } from 'rxjs/operators';
 
-// Boilerplate for applying mixins to NgInputRange.
-/** @docs-private */
-class NgInputRangeBase {
-  constructor(public _elementRef: ElementRef) {}
+// const _NgInputRangeMixinBase: CanColorCtor & typeof NgInputRangeBase = mixinColor(NgInputRangeBase);
+
+export interface INgInputRange {
+  input: number;
+  range: number;
 }
 
-const _NgInputRangeMixinBase: CanColorCtor & typeof NgInputRangeBase = mixinColor(NgInputRangeBase);
+class NgInputRangeBase {
+  constructor(
+    public _parentFormGroup: FormGroupDirective,
+    public _parentForm: NgForm,
+    public _elementRef: ElementRef,
+    public ngControl: NgControl
+  ) {}
+}
+
+const _NgInputRangeMixinBase: CanColorCtor & CanDisableCtor & typeof NgInputRangeBase = mixinColor(
+  mixinDisabled(NgInputRangeBase)
+);
 
 @Component({
   selector: 'ng-input-range',
+  exportAs: 'ngInputRange',
+  host: {
+    '[attr.disabled]': 'disabled || null',
+    // Add a class for disabled input styling instead of the using attribute
+    // selector or pseudo-selector.  This allows users to create focusable
+    // disabled buttons without recreating the styles.
+    '[class.ng-input-range-disabled]': 'disabled',
+    class: 'ng-input-range-focus-indicator',
+  },
+  inputs: ['disabled', 'color'],
   template: `
     <ng-container [formGroup]="form">
       <input
@@ -54,11 +95,6 @@ const _NgInputRangeMixinBase: CanColorCtor & typeof NgInputRangeBase = mixinColo
   encapsulation: ViewEncapsulation.None,
   providers: [
     {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: forwardRef(() => NgInputRangeComponent),
-    },
-    {
       provide: MatFormFieldControl,
       useExisting: NgInputRangeComponent,
     },
@@ -66,89 +102,60 @@ const _NgInputRangeMixinBase: CanColorCtor & typeof NgInputRangeBase = mixinColo
 })
 export class NgInputRangeComponent
   extends _NgInputRangeMixinBase
-  implements OnInit, ControlValueAccessor, MatFormFieldControl<number>, CanDisable, CanColor {
-  static nextId = 0;
+  implements OnInit, DoCheck, OnDestroy, ControlValueAccessor, MatFormFieldControl<number>, CanDisable, CanColor {
+  private static nextId = 0;
+  @ViewChild(MatInput, { read: ElementRef, static: true })
+  input: ElementRef;
+
   @Input() min: number;
   @Input() max: number;
-  @Input() minLength: number;
-  @Input() maxLength: number;
   @Input() size: number;
   @Input() step: number;
-  @Input() color: ThemePalette = 'accent';
+  @Input() required: boolean;
+  @Input() set disabled(value: boolean) {
+    value ? this.form.disable() : this.form.enable();
+    value ? this.formControl.disable() : this.formControl.enable();
+  }
 
-  focused = false;
-  errorState = false;
+  @HostBinding()
+  id = `ng-input-range-id-${NgInputRangeComponent.nextId++}`;
+  @HostBinding('attr.aria-describedby') describedBy = '';
+  focused: boolean;
 
-  readonly ngControl = null;
   readonly controlType = 'ng-input-range';
   readonly autofilled: boolean;
-  readonly empty: boolean;
-  readonly stateChanges: Subject<void> = new Subject<void>();
+  readonly errorState: boolean;
+  readonly placeholder: string;
+  readonly stateChanges: Subject<any> = new Subject();
   readonly userAriaDescribedBy: string;
-  readonly shouldLabelFloat: boolean;
 
-  readonly form = new FormGroup({
-    input: new FormControl({ value: 0, disabled: this.disabled }),
-    range: new FormControl({ value: 0, disabled: this.disabled }),
-  });
-  readonly formControl = new FormControl(0);
-
-  @HostBinding() id = `${this.controlType}-${NgInputRangeComponent.nextId++}`;
-  @HostBinding('attr.aria-describedby') describedBy = '';
-  private subscription: Subscription;
+  color: ThemePalette;
+  defaultColor: ThemePalette;
+  form: FormGroup;
+  formControl: FormControl;
 
   constructor(
-    private fb: FormBuilder,
     private fm: FocusMonitor,
-    private elRef: ElementRef,
-    private cdr: ChangeDetectorRef
+    private fb: FormBuilder,
+    @Optional() elementRef: ElementRef,
+    @Optional() @Self() public ngControl: NgControl,
+    @Optional() _parentForm: NgForm,
+    @Optional() _parentFormGroup: FormGroupDirective
   ) {
-    super(elRef);
-  }
+    super(_parentFormGroup, _parentForm, elementRef, ngControl);
 
-  @Input() set readonly(val: boolean) {
-    if (!!val) {
-      val ? this.form.disable() : this.form.enable();
+    if (this.ngControl != null) {
+      this.ngControl.valueAccessor = this;
     }
+
+    this.form = fb.group({
+      input: fb.control({ value: 0, disabled: this.disabled }),
+      range: fb.control({ value: 0, disabled: this.disabled }),
+    });
+
+    this.formControl = fb.control({ value: 0, disabled: this.disabled });
   }
 
-  private _disabled = false;
-
-  @Input()
-  get disabled() {
-    return this._disabled;
-  }
-
-  set disabled(dis) {
-    this._disabled = coerceBooleanProperty(dis);
-    this.stateChanges.next();
-  }
-
-  private _required = false;
-
-  @Input()
-  get required() {
-    return this._required;
-  }
-
-  set required(req) {
-    this._required = coerceBooleanProperty(req);
-    this.stateChanges.next();
-  }
-
-  private _placeholder: string;
-
-  @Input()
-  get placeholder() {
-    return this._placeholder;
-  }
-
-  set placeholder(plh) {
-    this._placeholder = plh;
-    this.stateChanges.next();
-  }
-
-  @Input()
   get value(): number | null {
     const val = this.formControl.value;
     if (val) {
@@ -157,79 +164,93 @@ export class NgInputRangeComponent
     return null;
   }
 
+  @Input()
   set value(value: number | null) {
-    this.writeValue(value);
-    // console.log(value);
-    this.stateChanges.next();
-  }
-
-  @HostBinding('class.floating')
-  get shouldPlaceholderFloat() {
-    return this.focused || !this.empty;
-  }
-
-  onContainerClick(event: MouseEvent) {
-    if ((event.target as Element).tagName.toLowerCase() !== 'input') {
-      this.elRef.nativeElement.querySelector('input').focus();
+    if (!this.disabled) {
+      this.writeValue(value);
+      this.stateChanges.next();
     }
   }
 
-  setDescribedByIds(ids: string[]) {
+  get empty(): boolean {
+    return !this.value;
+  }
+
+  @HostBinding('class.floated')
+  get shouldLabelFloat(): boolean {
+    return true;
+  }
+
+  onChange = (value: number) => {};
+
+  onTouch = () => {};
+
+  writeValue(value: number): void {
+    if (!this.disabled) {
+      this.form.setValue({ input: value, range: value });
+    }
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouch = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+    this.form.disable();
+    this.stateChanges.next();
+  }
+
+  setDescribedByIds(ids: string[]): void {
     this.describedBy = ids.join(' ');
   }
 
-  ngOnInit() {
-    this.subscription = this.form.valueChanges
+  onContainerClick(): void {
+    this.fm.focusVia(this.input, 'program');
+  }
+
+  ngOnInit(): void {
+    this.fm.monitor(this.input).subscribe((focused) => {
+      this.focused = !!focused;
+      this.stateChanges.next();
+    });
+    this.fm
+      .monitor(this.input)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.onTouch();
+      });
+    this.form.valueChanges
       .pipe(
         // tslint check value for 'null' and warns that `startWith(null)` was deprecated;
         // however we always have a value in the form that is why we are asserting `form.value` type to `{ input; range }`
         startWith(this.form.value as { input; range }),
         pairwise(),
         map(([oldValue, newValue]) => {
-          if (oldValue.range !== newValue.range) {
-            this.formControl.setValue(newValue.range ?? this.min);
+          if (!this.disabled) {
+            if (oldValue.range !== newValue.range) {
+              this.formControl.setValue(newValue.range ?? this.min);
 
-            return { input: newValue.range, range: newValue.range };
-          } else if (oldValue.input !== newValue.input) {
-            this.formControl.setValue(newValue.input ?? this.min);
+              return { input: newValue.range, range: newValue.range };
+            } else if (oldValue.input !== newValue.input) {
+              this.formControl.setValue(newValue.input ?? this.min);
 
-            return { input: newValue.input, range: newValue.input };
+              return { input: newValue.input, range: newValue.input };
+            }
           }
         })
       )
       .subscribe(() => this.onChange(this.formControl.value));
   }
 
-  // Function to call when the input changes.
-  onChange = (value: number) => {};
-
-  // Allows Angular to update the model (rating).
-
-  // Function to call when the input is touched (when a star is clicked).
-  onTouched = () => {};
-
-  // Allows Angular to register a function to call when the model (rating) changes.
-
-  // Update the model and changes needed for the view here.
-  writeValue(value: number): void {
-    this.form.setValue({ input: value, range: value });
-    this.cdr.detectChanges();
+  ngOnDestroy() {
+    this.fm.stopMonitoring(this.input);
+    this.stateChanges.complete();
   }
 
-  // Allows Angular to register a function to call when the input has been touched.
-
-  // Save the function as a property to call later here.
-  registerOnChange(fn: (value: number) => void): void {
-    this.onChange = fn;
-  }
-
-  // Save the function as a property to call later here.
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  // Allows Angular to disable the input.
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
+  ngDoCheck(): void {}
 }
