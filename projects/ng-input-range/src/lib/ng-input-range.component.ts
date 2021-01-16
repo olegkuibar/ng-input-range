@@ -65,7 +65,7 @@ const _NgInputRangeMixinBase: CanColorCtor & CanDisableCtor & typeof NgInputRang
     // selector or pseudo-selector.  This allows users to create focusable
     // disabled buttons without recreating the styles.
     '[class.ng-input-range-disabled]': 'disabled',
-    class: 'ng-input-range-focus-indicator',
+    class: 'ng-input-range ng-input-range-focus-indicator',
   },
   inputs: ['disabled', 'color'],
   template: `
@@ -90,7 +90,7 @@ const _NgInputRangeMixinBase: CanColorCtor & CanDisableCtor & typeof NgInputRang
       />
     </ng-container>
   `,
-  styleUrls: ['ng-input-range.component.scss', '_ng-input-range-theme.scss'],
+  styleUrls: ['ng-input-range.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   providers: [
@@ -115,6 +115,9 @@ export class NgInputRangeComponent
   @Input() set disabled(value: boolean) {
     value ? this.form.disable() : this.form.enable();
     value ? this.formControl.disable() : this.formControl.enable();
+  }
+  get disabled(): boolean {
+    return this.form?.disabled ?? false;
   }
 
   @HostBinding()

@@ -2,26 +2,14 @@
 @import 'rangeTrackStyles';
 @import 'rangeThumbStyles';
 
-$primary: mat-palette($mat-teal, 400);
-$accent: mat-palette($mat-pink, A200, A100, A400);
-$theme: mat-light-theme(
-  (
-    color: (
-      primary: $primary,
-      accent: $accent,
-    ),
-  )
-);
-
-@mixin mat-input-range-color($config-or-theme) {
+@mixin ng-input-range-color($config-or-theme) {
   // Extract the color configuration in case a theme has been passed.
   // This allows consumers to either pass a theme object or a color configuration.
   $config: mat-get-color-config($config-or-theme);
   // Extract the palettes you need from the theme definition.
   $primary: map-get($config, primary);
   $accent: map-get($config, accent);
-
-  $cyan: mat-color($accent, 500);
+  $warn: map-get($config, warn);
 
   // Define any styles affected by the theme.
 
@@ -34,22 +22,76 @@ $theme: mat-light-theme(
     @include getTrackStyles('-moz-range-track');
 
     @include getTrackStyles('-ms-track');
+  }
 
-    @include getThumbStyles('-webkit-slider-thumb', $cyan) {
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);
+  ng-input-range {
+
+    &.mat-primary {
+      input[type='range'] {
+        @include getThumbStyles('-webkit-slider-thumb', mat-color($primary)) {
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        @include getThumbStyles('-moz-range-thumb', mat-color($primary)) {
+          box-sizing: border-box;
+        }
+
+        @include getThumbStyles('-ms-thumb', mat-color($primary)) {
+          box-sizing: border-box;
+          transform: translateY(calc(0.5rem - 50%));
+        }
+      }
     }
 
-    @include getThumbStyles('-moz-range-thumb', $cyan) {
-      box-sizing: border-box;
+    &.mat-accent {
+      input[type='range'] {
+        @include getThumbStyles('-webkit-slider-thumb', mat-color($accent)) {
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        @include getThumbStyles('-moz-range-thumb', mat-color($accent)) {
+          box-sizing: border-box;
+        }
+
+        @include getThumbStyles('-ms-thumb', mat-color($accent)) {
+          box-sizing: border-box;
+          transform: translateY(calc(0.5rem - 50%));
+        }
+      }
     }
 
-    @include getThumbStyles('-ms-thumb', $cyan) {
-      box-sizing: border-box;
-      transform: translateY(calc(0.5rem - 50%));
+    &.mat-warn {
+      input[type='range'] {
+        @include getThumbStyles('-webkit-slider-thumb', mat-color($warn)) {
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        @include getThumbStyles('-moz-range-thumb', mat-color($warn)) {
+          box-sizing: border-box;
+        }
+
+        @include getThumbStyles('-ms-thumb', mat-color($warn)) {
+          box-sizing: border-box;
+          transform: translateY(calc(0.5rem - 50%));
+        }
+      }
     }
   }
 }
 
-@include mat-input-range-color($theme);
+@mixin ng-input-range-theme($config-or-theme) {
+  // Extracts the color and typography configurations from the theme.
+  $color: mat-get-color-config($config-or-theme);
+
+  // Do not generate styles if configurations for individual theming
+  // systems have been explicitly set to `null`.
+  @if $color != null {
+    @include ng-input-range-color($color);
+  }
+}

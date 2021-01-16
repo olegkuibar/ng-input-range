@@ -18,6 +18,7 @@ export class AppComponent {
   step = 1;
   value = 0;
   appearance: 'fill' | 'outline' = 'outline';
+  theme: 'primary' | 'accent' = 'primary';
 
   form = new FormGroup({
     inputRange: new FormControl({ value: 96, disabled: this.disabled }),
