@@ -22,7 +22,7 @@
     "test:lib-coverage": "ng test ng-input-range --code-coverage --watch=false --browsers=ChromeHeadlessCustom",
     "report-coverage:lib": "cat ./coverage/ng-input-range/lcov.info | codecov",
     "publish:demo": "npx angular-cli-ghpages --dir=./dist/ng-input-range-showcase",
-    "publish:lib": "npx semantic-release",
+    "publish:lib": "npx -p @semantic-release/changelog -p @semantic-release/git -p semantic-release semantic-release",
     "adjust-version": "npm-run-all adjust-version:*",
     "adjust-version:lib": "rjp projects/ng-input-range/package.json version $VERSION",
     "adjust-version:main": "rjp package.json version $VERSION",
