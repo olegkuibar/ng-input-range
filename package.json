@@ -11,7 +11,7 @@
     "copy:readme": "copyfiles ./README.md ./projects/ng-input-range",
     "build": "npm run build:lib && npm run build:demo",
     "build:lib": "npm run copy:readme && ng build ng-input-range",
-    "build:demo": "ng build ng-input-range-showcase --prod'",
+    "build:demo": "ng build ng-input-range-showcase --prod --base-href='ng-input-range'",
     "format:check": "prettier --list-different 'projects/**/*.ts'",
     "format:write": "prettier --write 'projects/**/*.ts'",
     "format-package-json": "npm-run-all format-package-json:*",
