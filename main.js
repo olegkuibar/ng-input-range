@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/runner/work/ng-input-range/ng-input-range/projects/ng-input-range-showcase/src/main.ts */"Gz/w");
+module.exports = __webpack_require__(/*! /Users/olegkuibar/projects/github/ng-input-range/projects/ng-input-range-showcase/src/main.ts */"Gz/w");
 
 
 /***/ }),
