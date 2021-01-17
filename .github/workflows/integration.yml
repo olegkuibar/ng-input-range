@@ -1,0 +1,38 @@
+name: integration-tests
+on:
+  schedule:
+    - cron: 30 15 * * 0-6
+  push:
+    tags-ignore:
+      - '*.*'
+    branches:
+      - dev
+      - releases/v3
+
+jobs:
+  integration-checkout
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Install and Build 
+        run: |
+          npm install
+          npm run build:demo
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: ./dist/ng-input-range-showcase
+          BASE_BRANCH: master
+          
+      - name: Cleanup Generated Branch
+        uses: dawidd6/action-delete-branch@v2.0.1
+        with:
+          github_token: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
+          branches: gh-pages
