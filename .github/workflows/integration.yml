@@ -17,7 +17,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install and Build 
+      - name: Install and Build
         run: |
           npm install
           npm run build:demo
@@ -29,7 +29,7 @@ jobs:
           BRANCH: gh-pages
           FOLDER: ./dist/ng-input-range-showcase
           BASE_BRANCH: master
-          
+
       - name: Cleanup Generated Branch
         uses: dawidd6/action-delete-branch@v2.0.1
         with:
