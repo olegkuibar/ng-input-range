@@ -1,4 +1,4 @@
-name: integration-tests
+name: github-pages
 on:
   schedule:
     - cron: 30 15 * * 0-6
