@@ -29,12 +29,12 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
           FOLDER: ./dist/ng-input-range-showcase
 
       - name: Cleanup Generated Branch
         uses: dawidd6/action-delete-branch@v2.0.1
         with:
-          github_token: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           branches: gh-pages
