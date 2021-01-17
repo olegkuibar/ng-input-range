@@ -1,6 +1,6 @@
 # NgInputRange
 
-![publish-to-npm](https://github.com/olegkuibar/ng-input-range/workflows/publish-to-npm/badge.svg?branch=main&event=deployment_status) ![github-pages](https://github.com/olegkuibar/ng-input-range/workflows/github-pages/badge.svg?branch=main&event=workflow_run) ![unit-tests](https://github.com/olegkuibar/ng-input-range/workflows/unit-tests/badge.svg?branch=main)
+![publish-to-npm](https://github.com/olegkuibar/ng-input-range/workflows/publish-to-npm/badge.svg?branch=main) ![github-pages](https://github.com/olegkuibar/ng-input-range/workflows/github-pages/badge.svg) ![unit-tests](https://github.com/olegkuibar/ng-input-range/workflows/unit-tests/badge.svg?branch=main)
 
 `ng-input-range` introduces combined `<input type="number">` and `<input type="range">` as single component, allows user
 to set value or select from a range of values by moving the slider thumb benith input.
