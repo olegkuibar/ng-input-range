@@ -6,11 +6,10 @@ on:
     tags-ignore:
       - '*.*'
     branches:
-      - dev
-      - releases/v3
+      - master
 
 jobs:
-  integration-checkout
+  integration-checkout:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
