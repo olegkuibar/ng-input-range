@@ -1,4 +1,4 @@
-name: NgInputRange
+name: Build and Publish
 
 on:
   release:
@@ -45,8 +45,8 @@ jobs:
           GH_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.SEMANTIC_RELEASE_NPM_TOKEN }}
 
-        - name: Deploy
-          uses: peaceiris/actions-gh-pages@v3
-          with:
-            personal_token: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
-            publish_dir: ./dıst/ng-input-range
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
+          publish_dir: ./dıst/ng-input-range
