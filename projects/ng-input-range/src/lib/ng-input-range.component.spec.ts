@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormField, MatFormFieldAppearance, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PlatformModule } from '@angular/cdk/platform';
-import { NgInputRangeModule } from 'ng-input-range';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
+import { NgInputRangeModule } from './ng-input-range.module';
 
 describe('NgInputRange', () => {
   function createComponent<T>(component: Type<T>, providers: Provider[] = []): ComponentFixture<T> {
