@@ -1,6 +1,6 @@
-@import '~@angular/material/theming';
-@import 'rangeTrackStyles';
-@import 'rangeThumbStyles';
+@import '../../node_modules/@angular/material/theming';
+@import 'src/lib/rangeTrackStyles';
+@import 'src/lib/rangeThumbStyles';
 
 @mixin ng-input-range-color($config-or-theme) {
   // Extract the color configuration in case a theme has been passed.
