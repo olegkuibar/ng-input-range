@@ -25,7 +25,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: npm ci and npm run build
         run: |
-          npm ci
+          npm install
           npm run test:lib-coverage
           npm run report-coverage:lib
 
