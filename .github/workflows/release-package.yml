@@ -2,7 +2,7 @@ name: NgInputRange
 
 on:
   release:
-    types: [created]
+    types: [ created ]
 
 jobs:
   build:
@@ -12,19 +12,42 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: npm ci
-      - run: npm test
+      # Lint
+      - run: ng lint
+      # Test
+      - run: npm run test:lib-coverage
+      - run: npm run report-coverage:lib
 
-  publish-gpr:
+  publish:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          node-version: 12
-          registry-url: https://npm.pkg.github.com/
-      - run: npm ci
-      - run: npm publish
+          persist-credentials: false
+
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build:demo
+
+      - name: Deploy Demo
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: dist/ng-input-range-showscase # The folder the action should deploy.
+          CLEAN: true # Automatically remove deleted files from the deploy branch
+
+      - name: Run Semantic Release
+        run: npx semantic-release
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GH_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.SEMANTIC_RELEASE_NPM_TOKEN }}
+
+        - name: Deploy
+          uses: peaceiris/actions-gh-pages@v3
+          with:
+            personal_token: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
+            publish_dir: ./dıst/ng-input-range
