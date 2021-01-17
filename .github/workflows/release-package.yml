@@ -19,10 +19,7 @@ jobs:
             ${{ runner.os }}-node-
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
-      - run: npm install
-      # Lint
-      - run: ng lint
+          node-version: 12.8
       # Test
       - run: npm run test:lib-coverage
       - run: npm run report-coverage:lib
