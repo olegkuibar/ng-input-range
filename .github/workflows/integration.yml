@@ -32,7 +32,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
           BRANCH: gh-pages
           FOLDER: ./dist/ng-input-range-showcase
-          BASE_BRANCH: main
 
       - name: Cleanup Generated Branch
         uses: dawidd6/action-delete-branch@v2.0.1
