@@ -12,10 +12,11 @@ jobs:
         with:
           persist-credentials: false
         
-      - name: Publish to GitHub Packages
+      - name: Install dependencies
         run: |
-          npm run build:lib
-          npm run publish:lib
+          npm ci
+      - name: Release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
