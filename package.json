@@ -106,5 +106,12 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/olegkuibar/ng-input-range.git"
-  }
+  },
+  "keywords": [
+    "angular",
+    "material",
+    "input",
+    "range",
+    "slider"
+  ]
 }
