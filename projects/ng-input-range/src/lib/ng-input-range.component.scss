@@ -1,5 +1,5 @@
-@import 'rangeTrackStyles';
-
+@use 'rangeTrackStyles';
+@use 'rangeThumbStyles';
 /**
  * Cross browser "<input type="range" />" reset
  * Source: https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
@@ -39,10 +39,10 @@ input[type='range'] {
     &:hover,
     &:focus {
       input[type='range'] {
-        @include getTrackStyles('-webkit-slider-runnable-track');
-        @include getTrackStyles('-moz-range-track');
+        @include rangeTrackStyles.getTrackStyles('-webkit-slider-runnable-track');
+        @include rangeTrackStyles.getTrackStyles('-moz-range-track');
 
-        @include getTrackStyles('-ms-track');
+        @include rangeTrackStyles.getTrackStyles('-ms-track');
 
         background: transparent;
       }

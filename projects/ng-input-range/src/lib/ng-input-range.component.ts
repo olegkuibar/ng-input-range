@@ -67,7 +67,6 @@ const _NgInputRangeMixinBase: CanColorCtor & CanDisableCtor & typeof NgInputRang
     '[class.ng-input-range-disabled]': 'disabled',
     class: 'ng-input-range ng-input-range-focus-indicator',
   },
-  inputs: ['disabled', 'color'],
   template: `
     <ng-container [formGroup]="form">
       <input
@@ -107,6 +106,7 @@ export class NgInputRangeComponent
   @ViewChild(MatInput, { read: ElementRef, static: true })
   input: ElementRef;
 
+  @Input() color: ThemePalette;
   @Input() min: number;
   @Input() max: number;
   @Input() size: number;
@@ -132,8 +132,7 @@ export class NgInputRangeComponent
   readonly stateChanges: Subject<any> = new Subject();
   readonly userAriaDescribedBy: string;
 
-  color: ThemePalette;
-  defaultColor: ThemePalette;
+  defaultColor: ThemePalette = 'primary';
   form: FormGroup;
   formControl: FormControl;
 
