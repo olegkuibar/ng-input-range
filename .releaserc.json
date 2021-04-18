@@ -16,7 +16,7 @@
     "@semantic-release/github"
   ],
   "branches": [
-    "refs/tags/+([0-9])?(.{+([0-9]),x}).x",
+    "refs/tags/*",
     "+([0-9])?(.{+([0-9]),x}).x",
     "main",
     "next",
