@@ -4,7 +4,7 @@
     "name": "Oleg Kuibar",
     "email": "dev.olegkuibar@gmail.com"
   },
-  "version": "0.1.6",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -106,6 +106,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/olegkuibar/ng-input-range.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/",
+    "pkgRoot": "build"
   },
   "keywords": [
     "angular",

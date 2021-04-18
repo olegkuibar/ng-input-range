@@ -4,22 +4,27 @@ on:
     types: [ created ]
 
 jobs:
-  release:
-    name: Release
+  build:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Setup Node.js
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js (14.15.0)
         uses: actions/setup-node@v1
         with:
-          node-version: 14
-      - name: Install dependencies
+          node-version: '14.15.0'
+
+      - name: Install Pacakges
         run: npm ci
-      - name: Release
+
+      - name: Build Step
+        env:
+          CI: ""
+        run: npm run build
+
+      - name: Run Semantic Release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release

@@ -9,7 +9,7 @@
       "prepareCmd": "VERSION=${nextRelease.version} npm run adjust-version"
     }],
     ["@semantic-release/git", {
-      "assets": ["package.json", "projects/ng-simple-alert/package.json", "CHANGELOG.md"],
+      "assets": ["package.json", "projects/ng-input-range/package.json", "CHANGELOG.md"],
       "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
     }],
     "@semantic-release/github"
