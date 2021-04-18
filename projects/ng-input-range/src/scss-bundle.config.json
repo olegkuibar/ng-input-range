@@ -1,0 +1,8 @@
+{
+  "bundlerOptions": {
+    "entryFile": "./projects/ng-input-range/src/lib/_theme.scss",
+    "outFile": "./dist/ng-input-range/_theme.scss",
+    "ignoreImports": ["~@angular/.*"],
+    "logLevel": "trace"
+  }
+}

@@ -31,7 +31,7 @@ $theme: mat-light-theme((
 @include angular-material-theme($theme);
 
 
-@import '../../ng-input-range/theming';
+@import '../../ng-input-range/src/lib/theme';
 @include ng-input-range-theme($theme);
 
 html {

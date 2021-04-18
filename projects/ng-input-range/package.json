@@ -6,7 +6,7 @@
     "email": "dev.olegkuibar@gmail.com"
   },
   "files": [
-    "_theming.scss"
+    "src/lib/_theme.scss"
   ],
   "peerDependencies": {
     "@angular/common": "^10.2.4",

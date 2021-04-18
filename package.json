@@ -4,13 +4,13 @@
     "name": "Oleg Kuibar",
     "email": "dev.olegkuibar@gmail.com"
   },
-  "version": "0.0.0-development",
+  "version": "0.1.4.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "copy:readme": "copyfiles ./README.md ./projects/ng-input-range",
     "build": "npm run build:lib && npm run build:demo",
-    "build:lib": "npm run copy:readme && ng build ng-input-range",
+    "build:lib": "npm run copy:readme && ng build ng-input-range && scss-bundle -c projects/ng-input-range/src/scss-bundle.config.json",
     "build:demo": "ng build ng-input-range-showcase --prod --base-href='ng-input-range'",
     "format:check": "prettier --list-different 'projects/**/*.ts'",
     "format:write": "prettier --write 'projects/**/*.ts'",
@@ -42,6 +42,7 @@
     "@angular/platform-browser": "^11.2.10",
     "@angular/platform-browser-dynamic": "^11.2.10",
     "rxjs": "^6.6.7",
+    "scss-bundle": "^3.1.2",
     "tslib": "^2.1.0",
     "zone.js": "^0.11.3"
   },
