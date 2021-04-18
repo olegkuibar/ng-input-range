@@ -10,7 +10,7 @@
     "start": "ng serve",
     "copy:readme": "copyfiles ./README.md ./projects/ng-input-range",
     "build": "npm run build:lib && npm run build:demo",
-    "build:lib": "npm run copy:readme && ng build ng-input-range && scss-bundle -c projects/ng-input-range/src/scss-bundle.config.json",
+    "build:lib": "npm run copy:readme && ng build ng-input-range --prod  && scss-bundle -c projects/ng-input-range/src/scss-bundle.config.json",
     "build:demo": "ng build ng-input-range-showcase --prod --base-href='ng-input-range'",
     "format:check": "prettier --list-different 'projects/**/*.ts'",
     "format:write": "prettier --write 'projects/**/*.ts'",
