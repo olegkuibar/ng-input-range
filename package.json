@@ -41,6 +41,7 @@
     "@angular/material": "^11.2.9",
     "@angular/platform-browser": "^11.2.10",
     "@angular/platform-browser-dynamic": "^11.2.10",
+    "replace-json-property": "^1.6.3",
     "rxjs": "^6.6.7",
     "scss-bundle": "^3.1.2",
     "tslib": "^2.1.0",
