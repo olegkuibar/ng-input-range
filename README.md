@@ -5,13 +5,14 @@
 `ng-input-range` introduces combined `<input type="number">` and `<input type="range">` as single component, allows user
 to set value or select from a range of values by moving the slider thumb benith input.
 
+Links:
+* [Demo (GitHub Pages)](https://olegkuibar.github.io/ng-input-range/)
+* [Demo (StackBlitz)](https://ng-input-range.stackblitz.io/)
+* [NPM package](https://www.npmjs.com/package/ng-input-range)
+
 Component implements `ControlValueAccessor`, `MatFormFieldControl` therefore supports usage of Reactive Forms and
 can/should be used inside `mat-form-field` component
 of [MatFormFieldModule](https://material.angular.io/components/form-field/overview)
-
-
-1. NPM package available at [npmjs.com/package/ng-input-range](https://www.npmjs.com/package/ng-input-range)
-2. Interactive example available at [GitHub Pages](https://olegkuibar.github.io/ng-input-range/)
 
 ## Install
 
