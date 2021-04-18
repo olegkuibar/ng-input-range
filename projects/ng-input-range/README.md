@@ -1,7 +1,14 @@
 # NgInputRange
 
+![publish-to-npm](https://github.com/olegkuibar/ng-input-range/workflows/publish-to-npm/badge.svg?branch=main) ![github-pages](https://github.com/olegkuibar/ng-input-range/workflows/github-pages/badge.svg) ![unit-tests](https://github.com/olegkuibar/ng-input-range/workflows/unit-tests/badge.svg?branch=main)
+
 `ng-input-range` introduces combined `<input type="number">` and `<input type="range">` as single component, allows user
 to set value or select from a range of values by moving the slider thumb benith input.
+
+Links:
+* [Demo (GitHub Pages)](https://olegkuibar.github.io/ng-input-range/)
+* [Demo (StackBlitz)](https://ng-input-range.stackblitz.io/)
+* [NPM package](https://www.npmjs.com/package/ng-input-range)
 
 Component implements `ControlValueAccessor`, `MatFormFieldControl` therefore supports usage of Reactive Forms and
 can/should be used inside `mat-form-field` component
@@ -11,7 +18,7 @@ of [MatFormFieldModule](https://material.angular.io/components/form-field/overvi
 
 `npm i ng-input-range`
 
-Update your Module dependencies with
+Update your Module dependencies with `NgInputRangeModule`
 
 ```typescript
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -31,13 +38,9 @@ import {NgInputRangeModule} from "./ng-input-range.module";
 })
 ```
 
-## Example
-
-You may play with settings at _[GitHub Pages](https://olegkuibar.github.io/ng-input-range)_ example.
-
 ## Usage
 
-1. **Using `ng-input-range` with `FormControl`**
+### Using `ng-input-range` with `FormControl`
 
 ```typescript
 // my-component.component.ts
@@ -46,8 +49,6 @@ formGroup: new FormGroup({
   inputWithRange: new FormControl({ value: 0, disabled: false }),
 });
 ```
-
-HTML file
 
 ```angular2html
 <!-- my-component.component.html-->
@@ -62,18 +63,13 @@ HTML file
 </mat-form-field>
 ```
 
-2. **Using `ng-input-range` with data binding `[value]="inputWithRangeValue"`**
-
-TS file
+### Using `ng-input-range` with data binding `[value]="inputWithRangeValue"`
 
 ```typescript
 // my-component.component.ts
 
-public;
-inputWithRangeValue = 128;
+public inputWithRangeValue = 128;
 ```
-
-HTML
 
 ```angular2html
 <!-- my-component.component.html-->
@@ -86,6 +82,21 @@ HTML
     [value]="inputWithRangeValue"
   ></ng-input-range>
 </mat-form-field>
+```
+
+## Theming
+
+### Plain CSS/SCSS
+
+TBD
+
+### Angular Material
+
+In the styles of the component where you include `ng-input-range` you should pass your [Angular Material Theme](https://material.angular.io/guide/theming)
+
+```scss
+@import '~ng-input-range/theme';
+@include ng-input-range-theme(\$theme); #where \$theme is your angular-material theme
 ```
 
 ## API references for Angular Material Input with Range component
