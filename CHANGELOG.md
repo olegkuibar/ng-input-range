@@ -6,28 +6,26 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [0.1.4.4] - 20201-01-17
+## [0.1.5] - 2021-04-18
 
-Here we write upgrading notes for brands. It's a team effort to make them as
-straightforward as possible.
+[comment]: <> (Here we write upgrading notes for brands. It's a team effort to make them as)
+[comment]: <> (straightforward as possible.)
 
 ### Added
-- MINOR Add option to switch between themes
+- Add `scss-bundle` package
+- Add component theming mixin bundling to the library
 
 ### Change
-- MINOR Update README.md
+- Update README.md
+  - Added demo links
+  - Added example of usage with Material Theming
+- Upgrade to Angular v11.2
 
 ### Fixed
-- PATCH Fix input not being focused
-- PATCH Angular Material theming not working with component
-- PATCH "Value" setting field was not updating `FormControl`
-- PATCH "Step" setting field was not bind to the examples
+- Fix component material mixin was not accessible for import
+- Fix material theming was not applied to a component
 
-
-## [0.1.2] - 20201-01-17
-
-Here we write upgrading notes for brands. It's a team effort to make them as
-straightforward as possible.
+## [0.1.2] - 2020-01-17
 
 ### Added
 - MINOR Add option to switch between themes
