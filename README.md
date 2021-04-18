@@ -84,6 +84,21 @@ public inputWithRangeValue = 128;
 </mat-form-field>
 ```
 
+## Theming
+
+### Plain CSS/SCSS
+
+TBD
+
+### Angular Material
+
+In the styles of the component where you include `ng-input-range` you should pass your [Angular Material Theme](https://material.angular.io/guide/theming)
+
+```scss
+@import '~ng-input-range/theme';
+@include ng-input-range-theme(\$theme); #where \$theme is your angular-material theme
+```
+
 ## API references for Angular Material Input with Range component
 
 | Name                           | Description                                                                          |
