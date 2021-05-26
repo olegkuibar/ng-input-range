@@ -8,7 +8,7 @@ import { NgInputRangeComponent } from '../../../ng-input-range/src/lib/ng-input-
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  @ViewChild(NgInputRangeComponent) inputRange: NgInputRangeComponent;
+  @ViewChild(NgInputRangeComponent, { static: true }) inputRange!: NgInputRangeComponent;
   title = 'ng-input-range-showcase';
   autoTicks = false;
   disabled = false;
