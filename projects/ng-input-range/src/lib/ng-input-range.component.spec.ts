@@ -69,7 +69,7 @@ describe('NgInputRange', () => {
     `,
   })
   class NgInputRangeWithAppearance {
-    @ViewChild(MatFormField) formField: MatFormField;
-    appearance: MatFormFieldAppearance;
+    @ViewChild(MatFormField) formField!: MatFormField;
+    appearance!: MatFormFieldAppearance;
   }
 });

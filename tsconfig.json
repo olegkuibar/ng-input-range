@@ -16,10 +16,10 @@
     "outDir": "./dist/out-tsc",
     "moduleResolution": "node",
     "lib": [
-      "esnext",
+      "ES6",
       "dom"
     ],
-    "target": "esnext",
+    "target": "ES6",
     "module": "es2020",
     "paths": {
       "ng-input-range": [
@@ -27,5 +27,8 @@
         "dist/ng-input-range"
       ]
     }
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
   }
 }

@@ -143,8 +143,8 @@ export class NgInputRangeComponent
   formControl: FormControl;
 
   constructor(
+    fb: FormBuilder,
     private fm: FocusMonitor,
-    private fb: FormBuilder,
     @Optional() elementRef: ElementRef,
     @Optional() @Self() public ngControl: NgControl,
     @Optional() _parentForm: NgForm,
