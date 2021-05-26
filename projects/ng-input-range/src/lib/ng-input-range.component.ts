@@ -43,6 +43,7 @@ export interface INgInputRange {
   range: number;
 }
 
+type FormValue = { input: HTMLElement; range: number };
 class NgInputRangeBase {
   constructor(
     public _parentFormGroup: FormGroupDirective,
@@ -104,14 +105,19 @@ export class NgInputRangeComponent
   implements OnInit, DoCheck, OnDestroy, ControlValueAccessor, MatFormFieldControl<number>, CanDisable, CanColor {
   private static nextId = 0;
   @ViewChild(MatInput, { read: ElementRef, static: true })
-  input: ElementRef;
+  input!: ElementRef;
 
   @Input() color: ThemePalette;
-  @Input() min: number;
-  @Input() max: number;
-  @Input() size: number;
-  @Input() step: number;
-  @Input() required: boolean;
+  @Input()
+  min!: number;
+  @Input()
+  max!: number;
+  @Input()
+  size!: number;
+  @Input()
+  step!: number;
+  @Input()
+  required!: boolean;
   @Input() set disabled(value: boolean) {
     value ? this.form.disable() : this.form.enable();
     value ? this.formControl.disable() : this.formControl.enable();
@@ -123,14 +129,14 @@ export class NgInputRangeComponent
   @HostBinding()
   id = `ng-input-range-id-${NgInputRangeComponent.nextId++}`;
   @HostBinding('attr.aria-describedby') describedBy = '';
-  focused: boolean;
+  focused!: boolean;
 
   readonly controlType = 'ng-input-range';
-  readonly autofilled: boolean;
-  readonly errorState: boolean;
-  readonly placeholder: string;
+  readonly autofilled!: boolean;
+  readonly errorState!: boolean;
+  readonly placeholder!: string;
   readonly stateChanges: Subject<any> = new Subject();
-  readonly userAriaDescribedBy: string;
+  readonly userAriaDescribedBy!: string;
 
   defaultColor: ThemePalette = 'primary';
   form: FormGroup;
@@ -168,7 +174,7 @@ export class NgInputRangeComponent
 
   @Input()
   set value(value: number | null) {
-    if (!this.disabled) {
+    if (!this.disabled && value) {
       this.writeValue(value);
       this.stateChanges.next();
     }
@@ -230,9 +236,9 @@ export class NgInputRangeComponent
       .pipe(
         // tslint check value for 'null' and warns that `startWith(null)` was deprecated;
         // however we always have a value in the form that is why we are asserting `form.value` type to `{ input; range }`
-        startWith(this.form.value as { input; range }),
+        startWith(<FormValue>this.form.value),
         pairwise(),
-        map(([oldValue, newValue]) => {
+        map(([oldValue, newValue]: FormValue[]) => {
           if (!this.disabled) {
             if (oldValue.range !== newValue.range) {
               this.formControl.setValue(newValue.range ?? this.min);
@@ -244,6 +250,8 @@ export class NgInputRangeComponent
               return { input: newValue.input, range: newValue.input };
             }
           }
+
+          return newValue;
         })
       )
       .subscribe(() => this.onChange(this.formControl.value));
