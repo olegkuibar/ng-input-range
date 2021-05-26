@@ -1,16 +1,3 @@
-# [0.4.0](https://github.com/olegkuibar/ng-input-range/compare/v0.3.0...v0.4.0) (2021-05-26)
-
-
-### Bug Fixes
-
-* **showcase:** input range not initialized ([19b5816](https://github.com/olegkuibar/ng-input-range/commit/19b5816c5751117970596c49e453c1806b88e3ca))
-* es6 compatibility ([b883004](https://github.com/olegkuibar/ng-input-range/commit/b883004790ced72706941ec954a8698b6bf5ad81))
-
-
-### Features
-
-* update tsconfig ([398a37e](https://github.com/olegkuibar/ng-input-range/commit/398a37e221d015a55f5b21538f2cfe0f61cc40cf))
-
 # [0.3.0](https://github.com/olegkuibar/ng-input-range/compare/v0.2.0...v0.3.0) (2021-04-18)
 
 
