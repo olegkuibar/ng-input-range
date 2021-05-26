@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/olegkuibar/ng-input-range/compare/v0.2.0...v0.3.0) (2021-04-18)
+
+
+### Features
+
+* enable form-field coloring in example ([47966fc](https://github.com/olegkuibar/ng-input-range/commit/47966fca3a96aa3fc349987da8b5ce40968368a4))
+
 # [0.2.0](https://github.com/olegkuibar/ng-input-range/compare/v0.1.3...v0.2.0) (2021-04-18)
 
 
