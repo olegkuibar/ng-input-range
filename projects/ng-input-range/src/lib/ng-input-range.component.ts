@@ -176,7 +176,7 @@ export class NgInputRangeComponent
   set value(value: number | null) {
     if (!this.disabled && value) {
       this.writeValue(value);
-      this.stateChanges.next();
+      this.stateChanges.next(null);
     }
   }
 
@@ -210,7 +210,7 @@ export class NgInputRangeComponent
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
     this.form.disable();
-    this.stateChanges.next();
+    this.stateChanges.next(null);
   }
 
   setDescribedByIds(ids: string[]): void {
@@ -224,7 +224,7 @@ export class NgInputRangeComponent
   ngOnInit(): void {
     this.fm.monitor(this.input).subscribe((focused) => {
       this.focused = !!focused;
-      this.stateChanges.next();
+      this.stateChanges.next(null);
     });
     this.fm
       .monitor(this.input)
