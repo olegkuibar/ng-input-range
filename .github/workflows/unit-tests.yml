@@ -23,7 +23,7 @@ jobs:
 
       - uses: actions/setup-node@v1.4.4
         with:
-          node-version: '12.8'
+          node-version: '14.15'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install and Test
